@@ -1,38 +1,33 @@
-Parece que há um pequeno erro de formatação no trecho onde você explica como ativar o ambiente virtual. O bloco de código está usando quatro crases ao invés de três. Aqui está a versão corrigida:  
-
-```markdown
 ## Como executar o app
 
 #### Criar um ambiente virtual para as Libs do Python
 
-```
-python -m venv .venv  
+```bash
+python -m venv .venv  
 ```
 
-#### Ativar o ambiente virtual
+#### Activar o ambiente virtual
 
 ```bash
-.venv\scripts\activate  # No Windows
-source .venv/bin/activate  # No macOS/Linux
+.venv\scripts\activate
 ```
 
-#### Baixar as libs do projeto
+####  Baixar as libs do projeto
 
-```
-pip install -r requirements.txt 
+```bash
+
+pip install -r requirements.txt
+
 ```
 
 #### Executar as migrations
 
-```
+```bash
 python manage.py migrate
 ```
 
 #### Executar a app
 
-```
+```bash
 python manage.py runserver
 ```
-```
-
-🚀
