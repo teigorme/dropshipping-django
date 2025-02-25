@@ -1,11 +1,69 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth.hashers import make_password
+from .forms import RegisterForm, LoginForm
+from django.contrib import messages
+from django.contrib.auth.models import User
 
 def login(request):
-    return render(request, "auth/login.html")
+    form = LoginForm()
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            query = User.objects.get(email=email)
+            user = authenticate(request, username=query.username, password=password)
+
+            if user is not None:
+                auth_login(request, user)
+                return redirect("home")
+            else:
+                messages.error(
+                    request,
+                    "Credenciais inválidas. Verifique seu e-mail ou palavra-passe.",
+                )
+
+    return render(request, "auth/login.html", status=200, context={"form": form})
+
 
 def register(request):
-    return render(request, "auth/register.html")
+    form = RegisterForm()
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+
+            username = form.cleaned_data["username"]
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            confirm_password = form.cleaned_data["confirm_password"]
+
+           
+            if User.objects.filter(email=email).exists():
+                messages.error(
+                    request,
+                    "Este e-mail já está registrado.Tente novamente com outro e-mail",
+                )
+            
+            elif confirm_password != password:
+                messages.error(request, "A palavra-passe de confirmação não é igual a palavra-passe.Tente novamente")
+            else:
+
+                User.objects.create(
+                    username=username,
+                    email=email,
+                    password=make_password(password),
+                )
+                messages.success(request, "Sua conta foi criada com sucesso!")
+                return redirect("login")
+
+    return render(request, "auth/register.html", status=200, context={"form": form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("home")
+
 
 
 def index(request):

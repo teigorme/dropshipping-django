@@ -3,7 +3,8 @@
 <div
   class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
 >
-  <form class="space-y-6" action="#">
+  <form class="space-y-6" action="{% url 'register' %}" method="post">
+    {% csrf_token %}
     <h5 class="text-xl font-medium text-gray-900 dark:text-white">
       Registar-se na
       <a
@@ -18,14 +19,7 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >Nome completo</label
       >
-      <input
-        type="text"
-        name="full_name"
-        id="full_name"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-        placeholder="John Wick"
-        required
-      />
+      {{ form.username }}
     </div>
 
     <div>
@@ -34,14 +28,7 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >Seu email</label
       >
-      <input
-        type="email"
-        name="email"
-        id="email"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-        placeholder="jonhwick@gmail.com"
-        required
-      />
+      {{ form.email }}
     </div>
     <div>
       <label
@@ -49,14 +36,7 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >Sua palavra-passe</label
       >
-      <input
-        type="password"
-        name="password"
-        id="password"
-        placeholder="••••••••"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-        required
-      />
+      {{ form.password }}
     </div>
     <div>
       <label
@@ -64,14 +44,7 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >Confirme a sua palavra-passe</label
       >
-      <input
-        type="password"
-        name="confirm_password"
-        id="confirm_password"
-        placeholder="••••••••"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-        required
-      />
+      {{ form.confirm_password }}
     </div>
 
     <button
