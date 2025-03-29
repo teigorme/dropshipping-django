@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.hashers import make_password
 from .forms import RegisterForm, LoginForm
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .models import Product
 
 def login(request):
     form = LoginForm()
@@ -67,11 +68,16 @@ def logout_view(request):
 
 
 def index(request):
-    return render(request, "index.html")
+    products = Product.objects.all()[:4]
+    context = {"products":products}
+    return render(request, "index.html",context=context)
 
 def products(request):
-    return render(request, "products.html")
+    products = Product.objects.all()
+    context = {"products":products}
+    return render(request, "products.html",context=context)
 
 def details(request,id):
-    return render(request, "details.html")
+    product = get_object_or_404(Product, id=id) 
+    return render(request, "details.html", {"product": product})
 
