@@ -4,7 +4,9 @@ from django.contrib.auth.hashers import make_password
 from .forms import RegisterForm, LoginForm
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Product
+from .models import Product,Category
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 def login(request):
     form = LoginForm()
@@ -73,8 +75,34 @@ def index(request):
     return render(request, "index.html",context=context)
 
 def products(request):
+
+    search_query = request.GET.get("produto", "")
+    category_id = request.GET.get("categoria", "")
+
     products = Product.objects.all()
-    context = {"products":products}
+
+    if search_query:
+        products = products.filter(
+            Q(name__icontains=search_query) | Q(description__icontains=search_query)
+        )
+
+    if category_id:
+        products = products.filter(category=category_id)
+
+
+    paginator = Paginator(products, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)    
+
+
+    categories = Category.objects.all()
+    
+    context = {
+        "products":products,
+        "categories": categories,
+        "search_query": search_query,
+        "categories": categories,
+        "selected_category": category_id,}
     return render(request, "products.html",context=context)
 
 def details(request,id):

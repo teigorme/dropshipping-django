@@ -30,15 +30,16 @@ class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, verbose_name="Nome do produto")
     description = models.TextField(verbose_name="Descrição do produto")
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Preço do produto")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Preço do produto", default=0.00)
     stock = models.PositiveIntegerField(verbose_name="Em estoque")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name="Categoria do produto")
+    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.00, verbose_name="Desconto (%)")
     image = models.ImageField(upload_to='uploads/', blank=True, null=True, verbose_name="Imagem do produto")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.category.name}"
 
     class Meta:
         verbose_name = "Produto"
